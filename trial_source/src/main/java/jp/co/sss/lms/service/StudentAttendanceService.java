@@ -335,7 +335,8 @@ public class StudentAttendanceService {
 	}
 
 	/**
-	 * @author Saegusa
+	 * 未入力確認
+	 * @author Saegusa Task.25
 	 * @return 未入力日があるとき：true,ないとき：false
 	 * @throws ParseException
 	 */
