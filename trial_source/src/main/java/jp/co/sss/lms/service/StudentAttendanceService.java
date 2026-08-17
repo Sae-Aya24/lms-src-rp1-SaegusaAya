@@ -334,4 +334,34 @@ public class StudentAttendanceService {
 		return messageUtil.getMessage(Constants.PROP_KEY_ATTENDANCE_UPDATE_NOTICE);
 	}
 
+	/**
+	 * @author Saegusa
+	 * @return 未入力日があるとき：true,ないとき：false
+	 * @throws ParseException
+	 */
+	public Boolean notEnterCheck() throws ParseException {
+		// 1.今日の日付を取得
+		Date now = new Date();
+		// DateUtilを用いてyyyy/MM/dd型に変換
+		String todayStr = dateUtil.toString(now);
+		// 変換したものをDate型に戻す
+		Date today = dateUtil.parse(todayStr);
+
+		// 2.ログインユーザーID取得
+		Integer lmsUserId = loginUserDto.getLmsUserId();
+
+		// 3.削除フラグ(未入力：0のものだけを抽出するため)
+		Short deleteFlg = 0;
+
+		// 4.Mapper呼び出し、未入力件数の取得
+		Integer count = tStudentAttendanceMapper.notEnterCount(lmsUserId, deleteFlg, today);
+
+		// 5.結果(Boolean)をreturn
+		// 件数が0より大きい(かつnullではない)とき
+		if (count != null && count > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
