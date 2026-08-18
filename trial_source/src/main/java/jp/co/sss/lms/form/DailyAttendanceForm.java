@@ -50,7 +50,7 @@ public class DailyAttendanceForm {
 	// 三枝あや - Task.26
 	// [Task.26](追加項目)出退勤時間プルダウン選択用
 	// 時間、分の定義
-	
+
 	// 出勤時間(時)
 	private Integer trainingStartTimeHour;
 	// 出勤時間(分)
