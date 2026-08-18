@@ -32,4 +32,11 @@ public class AttendanceForm {
 	/** 日次の勤怠フォームリスト */
 	private List<DailyAttendanceForm> attendanceList;
 
+	// 三枝あや - Task.26
+	// [Task.26](追加項目)出退勤時間用マップ
+	// 1.時間のプルダウン選択用マップ(0-23)
+	private LinkedHashMap<Integer, String> hourMap;
+	
+	// 2.分のプルダウン選択用マップ(0-59)
+	private LinkedHashMap<Integer, String> minuteMap;
 }
