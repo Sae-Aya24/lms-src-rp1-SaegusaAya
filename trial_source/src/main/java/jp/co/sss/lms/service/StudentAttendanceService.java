@@ -3,6 +3,7 @@ package jp.co.sss.lms.service;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
@@ -206,6 +207,7 @@ public class StudentAttendanceService {
 
 	/**
 	 * 勤怠フォームへ設定
+	 * 三枝あやーTask.26
 	 * 
 	 * @param attendanceManagementDtoList
 	 * @return 勤怠編集フォーム
@@ -220,6 +222,29 @@ public class StudentAttendanceService {
 		attendanceForm.setLeaveFlg(loginUserDto.getLeaveFlg());
 		attendanceForm.setBlankTimes(attendanceUtil.setBlankTime());
 
+		// 三枝あや - Task.26
+		// [Task.26]時・分のプルダウン選択用マップの生成とセット
+
+		// 時間マップ生成
+		LinkedHashMap<Integer, String> hourMap = new LinkedHashMap<>();
+		// マップに{null,""}を追加
+		hourMap.put(null, "");
+		// 時間マップに追加していく(～23)
+		for (int i = 0; i < 24; i++) {
+			hourMap.put(i, String.format("%02d", i));
+		}
+		// 分マップ生成
+		LinkedHashMap<Integer, String> minuteMap = new LinkedHashMap<>();
+		// マップに{null,""}を追加
+		minuteMap.put(null, "");
+		// 分マップに追加していく(～59)
+		for (int i = 0; i < 60; i++) {
+			minuteMap.put(i, String.format("%02d", i));
+		}
+
+		// マップをFormにセットする
+		attendanceForm.setHourMap(hourMap);
+		attendanceForm.setMinuteMap(minuteMap);
 		// 途中退校している場合のみ設定
 		if (loginUserDto.getLeaveDate() != null) {
 			attendanceForm
@@ -238,6 +263,29 @@ public class StudentAttendanceService {
 			dailyAttendanceForm
 					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
 			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
+			
+			// 三枝あや - Task.26
+			// [Task.26]出退勤時刻を時・分に分離しセットする
+			
+			// 表示用の日付文字列生成
+			String startTimeStr = attendanceManagementDto.getTrainingStartTime();
+			// 出勤時間を分離する
+			if (startTimeStr != null && startTimeStr.length() >= 5) {
+				Integer startHour = Integer.parseInt(startTimeStr.substring(0, 2));
+				Integer startMinute = Integer.parseInt(startTimeStr.substring(3, 5));
+				dailyAttendanceForm.setTrainingStartTimeHour(startHour);
+				dailyAttendanceForm.setTrainingStartTimeMinute(startMinute);
+			}
+			// 表示用の日付文字列生成
+			String endTimeStr = attendanceManagementDto.getTrainingEndTime();
+			if (endTimeStr != null && endTimeStr.length() >= 5) {
+				Integer endHour = Integer.parseInt(endTimeStr.substring(0, 2));
+				Integer endMinute = Integer.parseInt(endTimeStr.substring(3, 5));
+				dailyAttendanceForm.setTrainingEndTimeHour(endHour);
+				dailyAttendanceForm.setTrainingEndTimeMinute(endMinute);
+			}
+			
+			
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
