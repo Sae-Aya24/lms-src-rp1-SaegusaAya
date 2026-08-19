@@ -263,10 +263,10 @@ public class StudentAttendanceService {
 			dailyAttendanceForm
 					.setTrainingStartTime(attendanceManagementDto.getTrainingStartTime());
 			dailyAttendanceForm.setTrainingEndTime(attendanceManagementDto.getTrainingEndTime());
-			
+
 			// 三枝あや - Task.26
 			// [Task.26]出退勤時刻を時・分に分離しセットする
-			
+
 			// 表示用の日付文字列生成
 			String startTimeStr = attendanceManagementDto.getTrainingStartTime();
 			// 出勤時間を分離する
@@ -284,8 +284,7 @@ public class StudentAttendanceService {
 				dailyAttendanceForm.setTrainingEndTimeHour(endHour);
 				dailyAttendanceForm.setTrainingEndTimeMinute(endMinute);
 			}
-			
-			
+
 			if (attendanceManagementDto.getBlankTime() != null) {
 				dailyAttendanceForm.setBlankTime(attendanceManagementDto.getBlankTime());
 				dailyAttendanceForm.setBlankTimeValue(String.valueOf(
@@ -303,6 +302,44 @@ public class StudentAttendanceService {
 		}
 
 		return attendanceForm;
+	}
+
+	// 三枝あや - Task.26
+	/**
+	 * 入力された出退勤の時・分を「hh:mm」形式に変換しセットする
+	 * 
+	 * @author 三枝あや
+	 * @param attendanceForm
+	 */
+	public void formatConversion(AttendanceForm attendanceForm) {
+		// NullPointerExceptionによるエラー防止
+		// 処理対象データが存在しないとき、処理を中断する
+		if (attendanceForm == null || attendanceForm.getAttendanceList() == null) {
+			return;
+		}
+
+		for (DailyAttendanceForm dailyAttendanceForm : attendanceForm.getAttendanceList()) {
+
+			// [出勤]時・分がともに入力されている場合、%02d:%02d形式でセット
+			Integer startHour = dailyAttendanceForm.getTrainingStartTimeHour();
+			Integer startMinute = dailyAttendanceForm.getTrainingStartTimeMinute();
+			if (startHour != null && startMinute != null) {
+				String startTimeFormatted = String.format("%02d:%02d", startHour, startMinute);
+				dailyAttendanceForm.setTrainingStartTime(startTimeFormatted);
+			} else {
+				dailyAttendanceForm.setTrainingStartTime(null);
+			}
+
+			// [退勤]時・分がともに入力されている場合、%02d:%02d形式でセット
+			Integer endHour = dailyAttendanceForm.getTrainingEndTimeHour();
+			Integer endMinute = dailyAttendanceForm.getTrainingEndTimeMinute();
+			if (endHour != null && endMinute != null) {
+				String endTimeFormatted = String.format("%02d:%02d", endHour, endMinute);
+				dailyAttendanceForm.setTrainingEndTime(endTimeFormatted);
+			} else {
+				dailyAttendanceForm.setTrainingEndTime(null);
+			}
+		}
 	}
 
 	/**
