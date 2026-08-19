@@ -121,6 +121,8 @@ public class AttendanceUtil {
 			} else if (minute == 0) {
 				time = hour + "時間";
 			} else {
+				// 三枝あや - Task.26
+				// [修正]"時"→"時間"
 				time = hour + "時間" + minute + "分";
 			}
 
