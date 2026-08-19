@@ -45,12 +45,12 @@ public class AttendanceController {
 		List<AttendanceManagementDto> attendanceManagementDtoList = studentAttendanceService
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
-		
+
 		// 三枝あや - Task.25
 		// [Task.25]未入力日チェック
 		Boolean hasNotEnter = studentAttendanceService.notEnterCheck();
 		model.addAttribute("hasNotEnter", hasNotEnter);
-		
+
 		return "attendance/detail";
 	}
 
@@ -136,6 +136,10 @@ public class AttendanceController {
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
 	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
 			throws ParseException {
+		// 三枝あや - Task.26
+		// 文字列(null)のままDB保存されることを防ぐ
+		// formatConversion呼び出し
+		studentAttendanceService.formatConversion(attendanceForm);
 
 		// 更新
 		String message = studentAttendanceService.update(attendanceForm);
