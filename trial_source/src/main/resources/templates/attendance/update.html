@@ -88,12 +88,12 @@
 								</td>
 								<td>:</td>
 								<td class="w70">
-								<select th:name="|attendanceList[${stat.index}].trainingEndTimeMinute|"
-									class="form-control">
-									<option th:each="minute : ${attendanceForm.minuteMap}" th:value="${minute.key}"
-										th:selected="${minute.key == dailyAttendanceForm.trainingEndTimeMinute}">
-										[[${minute.value}]]</option>
-								</select>
+									<select th:name="|attendanceList[${stat.index}].trainingEndTimeMinute|"
+										class="form-control">
+										<option th:each="minute : ${attendanceForm.minuteMap}" th:value="${minute.key}"
+											th:selected="${minute.key == dailyAttendanceForm.trainingEndTimeMinute}">
+											[[${minute.value}]]</option>
+									</select>
 								</td>
 								<!-- セレクトボタン実装ここまで -->
 								<td class="w120">
