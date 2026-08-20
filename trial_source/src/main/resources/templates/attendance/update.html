@@ -28,6 +28,9 @@
 						<tr>
 							<th class="w140">日付</th>
 							<th class="w140">コース内容</th>
+							<!-- 三枝あや - Task.28 -->
+							<!-- [Task.28]定時の自動反映 -->
+							<th class="w60"></th>
 							<th class="w180" colspan="3">出勤</th>
 							<th class="w180" colspan="3">退勤</th>
 							<th class="w120">中抜け時間</th>
@@ -54,6 +57,13 @@
 								</th:block>
 								<td class="w140">[[${dailyAttendanceForm.dispTrainingDate}]]</td>
 								<td class="w140">[[${dailyAttendanceForm.sectionName}]]</td>
+								<!-- 三枝あや - Task.28 -->
+								<!-- [Task.28]定時の自動反映ボタン実装ここから -->
+								<td class="w60">
+									<input type="button" class="btn btn-success default-button" value="定時"
+										onclick="setDefaultTime(this)">
+								</td>
+								<!-- [Task.28]定時の自動反映ボタン実装ここまで -->
 								<!-- 三枝あや - Task.26 -->
 								<!-- セレクトボタン実装ここから-->
 								<!--　出勤 -->
@@ -127,6 +137,32 @@
 			</form>
 		</div>
 	</div>
+
+	<!-- 三枝あや - Task.28 -->
+	<script th:inline="none">
+		/**
+		 * [Task.28]定時の自動反映用JSの実装 
+		 * 押下された行のプルダウンに定時をセット 
+		 * 画面上の値のみを変更する(DBへの保存なし) 
+		 * 保存は「更新」ボタン押下が必要  
+		 *@param button 押下された定時ボタン(this)
+		 */
+		function setDefaultTime(button) {
+			// 押下されたボタンが属する行を取得(tr)
+			var row = button.closest('tr');
+
+			// 出勤時間を09:00に設定
+			// rowのselectタグのname属性に"trainingStartTimeHour"があるかどうか部分一致で探す
+			row.querySelector('select[name*="trainingStartTimeHour"]').value = '9';
+			// 同様に分でも行う
+			row.querySelector('select[name*="trainingStartTimeMinute"]').value = '0';
+
+			// 退勤時間を18:00に設定
+			// 出勤時間と同様に行う
+			row.querySelector('select[name*="trainingEndTimeHour"]').value = '18';
+			row.querySelector('select[name*="trainingEndTimeMinute"]').value = '0';
+		}
+	</script>
 
 </body>
 
